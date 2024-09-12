@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Time Slots</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .time-slot {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Select a Time Slot</h2>
+        <div class="row">
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="10:00 AM">10:00 AM</button>
+            </div>
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="11:00 AM">11:00 AM</button>
+            </div>
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="12:00 PM">12:00 PM</button>
+            </div>
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="1:00 PM">1:00 PM</button>
+            </div>
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="2:00 PM">2:00 PM</button>
+            </div>
+            <div class="col-md-4 time-slot">
+                <button class="btn btn-outline-primary btn-block" data-time="3:00 PM">3:00 PM</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.time-slot button').forEach(button => {
+            button.addEventListener('click', function() {
+                const selectedTime = this.getAttribute('data-time');
+                alert('You have selected: ' + selectedTime);
+                // Here you can also send the selected time to your server or process it further
+            });
+        });
+    </script>
+</body>
+</html>
