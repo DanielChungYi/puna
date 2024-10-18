@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/DanielChungYi/puna.git/pkg/config"
-	"github.com/DanielChungYi/puna.git/pkg/models"
+	"github.com/DanielChungYi/puna.git/interal/config"
+	"github.com/DanielChungYi/puna.git/interal/models"
 	"github.com/justinas/nosurf"
 
 	"html/template"

@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/DanielChungYi/puna.git/pkg/config"
-	"github.com/DanielChungYi/puna.git/pkg/handlers"
-	"github.com/DanielChungYi/puna.git/pkg/render"
+	"github.com/DanielChungYi/puna/internal/config"
+	"github.com/DanielChungYi/puna/internal/handlers"
+	"github.com/DanielChungYi/puna/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 

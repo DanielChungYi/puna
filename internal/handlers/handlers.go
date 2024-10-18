@@ -7,9 +7,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/DanielChungYi/puna.git/pkg/config"
-	"github.com/DanielChungYi/puna.git/pkg/models"
-	"github.com/DanielChungYi/puna.git/pkg/render"
+	"github.com/DanielChungYi/puna/internal/config"
+	"github.com/DanielChungYi/puna/internal/models"
+	"github.com/DanielChungYi/puna/internal/render"
 )
 
 // Repo the repository used by the handlers

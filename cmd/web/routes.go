@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/DanielChungYi/puna.git/pkg/config"
-	"github.com/DanielChungYi/puna.git/pkg/handlers"
+	"github.com/DanielChungYi/puna.git/internal/config"
+	"github.com/DanielChungYi/puna.git/internal/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
