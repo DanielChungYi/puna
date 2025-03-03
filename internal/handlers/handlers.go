@@ -75,17 +75,44 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
 
-// PostAvailability handles post
-func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
-	start := r.Form.Get("start")
-	end := r.Form.Get("end")
-
-	w.Write([]byte(fmt.Sprintf("start date is %s and end is %s", start, end)))
-}
-
 type jsonResponse struct {
 	OK      bool   `json:"ok"`
 	Message string `json:"message"`
+	Date    string `json:"data"`
+	Time    string `json:"time"`
+}
+
+// PostAvailability handles post
+func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
+	date := r.Form.Get("reservation-dates")
+	time := r.Form.Get("selected-time")
+
+	// Dump all the post data
+	for key, values := range r.Form {
+		for _, value := range values {
+			fmt.Printf("%s = %s\n", key, value)
+		}
+	}
+
+	// Place the DB lookup logic here and sned it back to client
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Available!",
+		Date:    date,
+		Time:    time,
+	}
+
+	out, err := json.MarshalIndent(resp, "", "     ")
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
+
+	fmt.Println("Respon JSON:", string(out))
+
+	//w.Write([]byte(fmt.Sprintf("Date is %s and time is %s", data, time)))
 }
 
 // AvailabilityJSON handles request for availability and sends JSON response

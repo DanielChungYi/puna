@@ -12,86 +12,81 @@
                     <div class="row">
                         <div class="col" >
                             
-                                <input required class="form-control" type="text" placeholder="日期" id="reservation-dates">
+                                <input required class="form-control" type="text" placeholder="日期" id="reservation-dates" name="reservation-dates">
                            
                         </div>
                     </div> 
 
                     <hr>
 
-
+                    <!-- for selected-time -->
+                    <input type="hidden" id="selected-time" name="selected-time">
 
                     <h1 class="mt-3">選擇時段</h1>
                     <h4 class="mt-3">早上</h4>
                     <div class="row">
-                        
-
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="8:00 AM">8:00 AM</button>
+                            <button  type="button" class="btn btn-outline-primary btn-block" data-time="8:00 AM">8:00 AM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="9:00 AM">9:00 AM</button>
+                            <button  type="button" class="btn btn-outline-primary btn-block" data-time="9:00 AM">9:00 AM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="10:00 AM">10:00 AM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="10:00 AM">10:00 AM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="11:00 AM">11:00 AM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="11:00 AM">11:00 AM</button>
                         </div>
                     </div>
                     
                     <h4 class="mt-3">下午</h4>
                     <div class="row">
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="12:00 PM">12:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="12:00 PM">12:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="1:00 PM">1:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="1:00 PM">1:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="2:00 PM">2:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="2:00 PM">2:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="3:00 PM">3:00 PM</button>
-                        </div>
-                    
-                        <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="4:00 PM">4:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="3:00 PM">3:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="5:00 PM">5:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="4:00 PM">4:00 PM</button>
+                        </div>
+                        <div class="col-md-3 time-slot">
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="5:00 PM">5:00 PM</button>
                         </div>
                     </div>
 
                     <h4 class="mt-3">晚上</h4>
                     <div class="row">
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="6:00 PM">6:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="6:00 PM">6:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="7:00 PM">7:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="7:00 PM">7:00 PM</button>
                         </div>
                    
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="8:00 PM">8:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="8:00 PM">8:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="9:00 PM">9:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="9:00 PM">9:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="10:00 PM">10:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="10:00 PM">10:00 PM</button>
                         </div>
                         <div class="col-md-3 time-slot">
-                            <button class="btn btn-outline-primary btn-block" data-time="11:00 PM">11:00 PM</button>
+                            <button type="button" class="btn btn-outline-primary btn-block" data-time="11:00 PM">11:00 PM</button>
                         </div>
                     </div>
                 
                 <hr>
 
                 <button type="submit" id="confrim_btn" class="btn btn-primary">確定</button>
-
-                
-                    
 
                 </form>
 
@@ -112,10 +107,78 @@
         format: "yyyy-mm-dd",
     });
 
-    document.getElementById('confrim_btn').addEventListener("click", function() {
-        notifyModal("感謝",  "<em> 預約成功 </em>", "success", "確認");
-    })
+    // Time slot btn logic 
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".btn.btn-outline-primary.btn-block");
+        const selectedTimeInput = document.getElementById("selected-time");
+        let selectedTime = "";
 
+        buttons.forEach(button => {
+            button.addEventListener("click", function () {
+
+                buttons.forEach(btn => btn.classList.remove("btn-primary"));
+                
+                this.classList.add("btn-primary");
+                selectedTime = this.getAttribute("data-time");
+                selectedTimeInput.value = selectedTime;
+            });
+        });
+
+        document.querySelector("form").addEventListener("submit", function (event) {
+            if (selectedTimeInput.value === "") {
+                Swal.fire("請選擇一個時段！");
+                event.preventDefault();
+            }
+        });
+    });
+
+    document.getElementById("confrim_btn").addEventListener("click", function (event) {
+        event.preventDefault();  // don't reflash the page
+        const selectedDate = document.getElementById("reservation-dates").value;
+        const selectedTime = document.getElementById("selected-time").value;
+        const msg = `已選擇日期：${selectedDate}，時段：${selectedTime}`;
+
+        attention.custom({
+            title: '確認預約',
+            msg: msg,
+            willOpen: () => {
+                if (!selectedDate) {
+                    Swal.fire("請選擇日期");
+                    return;
+                }
+                if (!selectedTime) {
+                    Swal.fire("請選擇時段");
+                    return;
+                }
+            },
+            didOpen: () => {
+                // Disable the btn here.
+            },
+            callback: async function(result) {
+                let formData = new FormData();
+                formData.append("csrf_token", "{{.CSRFToken}}");
+                formData.append("reservation-dates", selectedDate);
+                formData.append("selected-time", selectedTime);
+                try {
+                    const response = await fetch('/search-availability', {
+                    method: "post",
+                    body: formData,
+                    });
+
+                    const data = await response.json();
+                    console.log(data);
+                    if (data.ok) {
+                        Swal.fire(`✅ 預約成功！\n📅 日期：${data.date}\n🕒 時間：${data.time}\n📢 訊息：${data.message}`);
+                    } else {
+                        Swal.fire(`❌ 預約失敗：${data.message}`);
+                    }
+                } catch (error) {
+                    Swal.fire("⚠️ 發生錯誤，請稍後再試！" + error);
+                    console.log(error);
+                }            
+            }
+        });
+    })
 </script>
 {{end}}
 

@@ -153,6 +153,7 @@
             })
         }
 
+        
         function Prompt() {
             let toast = function (c) {
                 const{
@@ -211,6 +212,7 @@
 
             }
 
+            // Hooks for Swal2
             async function custom(c) {
                 const {
                     msg = "",
@@ -224,36 +226,27 @@
                     focusConfirm: false,
                     showCancelButton: true,
                     willOpen: () => {
-                        const elem = document.getElementById("reservation-dates-modal");
-                        const rp = new DateRangePicker(elem, {
-                            format: 'yyyy-mm-dd',
-                            showOnFocus: true,
-                        })
+                        if (c.willOpen !== undefined) {
+                            c.willOpen();
+                        }
                     },
                     didOpen: () => {
-                        document.getElementById("start").removeAttribute("disabled");
-                        document.getElementById("end").removeAttribute("disabled");
+                        if (c.didOpen !== undefined){
+                            c.didOpen();
+                        }
                     },
                     preConfirm: () => {
-                        return [
-                            document.getElementById('start').value,
-                            document.getElementById('end').value
-                        ]
+                        if (c.preConfirm !== undefined){
+                            c.preConfirm();
+                        }
                     }
                 })
 
-                if (result) {
-                    if (result.dismiss !== Swal.DismissReason.cancel) {
-                        if (result.value !== "") {
-                            if (c.callback !== undefined) {
-                                c.callback(result);
-                            }
-                        } else {
-                            c.callback(false);
-                        }
-                    } else {
-                        c.callback(false);
+                if (result.dismiss !== Swal.DismissReason.cancel) {
+                    if (c.callback !== undefined) {
+                        c.callback(result);
                     }
+
                 }
             }
 
