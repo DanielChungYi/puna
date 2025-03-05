@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/DanielChungYi/puna/internal/config"
+	forms "github.com/DanielChungYi/puna/internal/form"
 	"github.com/DanielChungYi/puna/internal/models"
 	"github.com/DanielChungYi/puna/internal/render"
 )
@@ -42,7 +43,9 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
 
 // Court information
