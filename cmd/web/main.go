@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/DanielChungYi/puna/internal/config"
+	"github.com/DanielChungYi/puna/internal/driver"
 	"github.com/DanielChungYi/puna/internal/handlers"
 	"github.com/DanielChungYi/puna/internal/render"
 	"github.com/alexedwards/scs/v2"
@@ -30,6 +31,17 @@ func main() {
 	session.Cookie.Secure = app.InProduction
 
 	app.Session = session
+
+	// connect to database
+	log.Println("Connecting to database....")
+	dsn := "host=localhost user=postgres password=qwer1234 dbname=testcy port=5432 sslmode=disable"
+	_, err := driver.ConnectSQL(dsn)
+	if err != nil {
+		log.Println("Fail to connect")
+	} else {
+		log.Println("Success to connect")
+	}
+	//db.GORM.Close()
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {

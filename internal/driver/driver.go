@@ -9,7 +9,7 @@ import (
 )
 
 type DB struct {
-	SQL *sql.DB
+	GORM *gorm.DB
 }
 
 var dbConn = &DB{}
@@ -26,16 +26,21 @@ func ConnectSQL(dsn string) (*DB, error) {
 	}
 
 	// Get underlying *sql.DB
-	sqlDB, err := db.DB()
+	gormDB, err := db.DB()
 	if err != nil {
 		return nil, err
 	}
 
+	// Test connection
+	testDB(gormDB)
+
 	// Set connection pool settings
-	sqlDB.SetMaxOpenConns(20)                  // Max open connections
-	sqlDB.SetMaxIdleConns(10)                  // Max idle connections
-	sqlDB.SetConnMaxLifetime(30 * time.Minute) // Max lifetime of a connection
-	sqlDB.SetConnMaxIdleTime(10 * time.Minute) // Max idle time before closing connection
+	gormDB.SetMaxOpenConns(20)                  // Max open connections
+	gormDB.SetMaxIdleConns(10)                  // Max idle connections
+	gormDB.SetConnMaxLifetime(30 * time.Minute) // Max lifetime of a connection
+	gormDB.SetConnMaxIdleTime(10 * time.Minute) // Max idle time before closing connection
+	mydb := DB{GORM: db}
+	return &mydb, nil
 }
 
 // NewDataBase creates a new database for the applications
