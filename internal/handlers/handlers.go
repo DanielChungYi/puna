@@ -3,14 +3,19 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"log"
+	"math/rand"
 	"net/http"
 
 	"github.com/DanielChungYi/puna/internal/config"
+	"github.com/DanielChungYi/puna/internal/driver"
 	forms "github.com/DanielChungYi/puna/internal/form"
 	"github.com/DanielChungYi/puna/internal/models"
 	"github.com/DanielChungYi/puna/internal/render"
+	"github.com/DanielChungYi/puna/internal/repository"
+	"github.com/DanielChungYi/puna/internal/repository/dbrepo"
 )
 
 // Repo the repository used by the handlers
@@ -19,12 +24,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(a, db.GORM),
 	}
 }
 
@@ -67,8 +74,8 @@ type jsonResponse struct {
 
 // PostAvailability handles post
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
-	date := r.Form.Get("reservation-dates")
-	time := r.Form.Get("selected-time")
+	selectedDate := r.Form.Get("reservation-dates")
+	selectedTime := r.Form.Get("selected-time")
 
 	// Dump all the post data
 	for key, values := range r.Form {
@@ -77,12 +84,40 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Place the DB lookup logic here and sned it back to client
+	// Place the DB lookup logic here and send it back to client
+	// Convertsion
+	rDate, err := time.Parse("2006-01-02", selectedDate)
+	if err != nil {
+		fmt.Println("Error parsing date:", err)
+		return
+	}
+	rTime, err := time.Parse("3:04 PM", selectedTime)
+	if err != nil {
+		fmt.Println("Error parsing time:", err)
+		return
+	}
+	// Combine the parsed date and time into a single time.Time
+	sDate := time.Date(rDate.Year(), rDate.Month(), rDate.Day(),
+		rTime.Hour(), rTime.Minute(), rTime.Second(), rTime.Nanosecond(),
+		time.Local)
+	eDate := sDate.Add(time.Hour)
+
+	// Insert Reservation
+	reservation := models.Reservation{
+		ID:           rand.Intn(1000),
+		ResStartTime: sDate,
+		ResEndTime:   eDate,
+		CreatedAt:    time.Now(),
+	}
+	m.DB.RunMigrate(reservation)
+	m.DB.InsertReservation(reservation)
+
+	// Response
 	resp := jsonResponse{
 		OK:      true,
 		Message: "Available!",
-		Date:    date,
-		Time:    time,
+		Date:    selectedDate,
+		Time:    selectedTime,
 	}
 
 	out, err := json.MarshalIndent(resp, "", "     ")

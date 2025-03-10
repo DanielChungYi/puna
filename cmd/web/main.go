@@ -35,7 +35,7 @@ func main() {
 	// connect to database
 	log.Println("Connecting to database....")
 	dsn := "host=localhost user=postgres password=qwer1234 dbname=testcy port=5432 sslmode=disable"
-	_, err := driver.ConnectSQL(dsn)
+	db, err := driver.ConnectSQL(dsn)
 	if err != nil {
 		log.Println("Fail to connect")
 	} else {
@@ -51,7 +51,7 @@ func main() {
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
 	render.NewTemplates(&app)
