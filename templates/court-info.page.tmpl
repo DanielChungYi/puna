@@ -1,47 +1,24 @@
 {{template "base" .}}
 
 {{define "content"}}
-
-    <div class="container">
-
-
-        <div class="row">
-            <div class="col">
-                <img src="/static/images/court_1.png"
-                     class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center mt-4">場地介紹</h1>
-                <p>
-                    場地介紹
-                </p>
-            </div>
-        </div>
-
-
-        <div class="row">
-
-            <div class="col text-center">
-
-                <a id="home-button" href="/" class="btn btn-success">回首頁</a>
-
-            </div>
-        </div>
-
-
-
-
+<main class="container">
+  <section class="section">
+    <div class="columns is-centered">
+      <div class="column is-half">
+        <figure class="image">
+          <img src="https://placehold.co/600x400" alt="room image">
+        </figure>
+      </div>
     </div>
-
-{{end}}
-
-
-{{define "js"}}
-<script>
-   
-</script>
+    <div class="columns">
+      <div class="column">
+        <h1 class="has-text-centered title">場地介紹</h1>
+        <p class="block">場地介紹</p>
+        <div class="has-text-centered">
+          <a href="/" class="button is-primary">回首頁</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 {{end}}

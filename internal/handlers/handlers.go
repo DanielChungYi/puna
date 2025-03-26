@@ -66,19 +66,17 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 }
 
 type jsonResponse struct {
-	OK      bool   `json:"ok"`
-	Message string `json:"message"`
-	Date    string `json:"data"`
-	Time    string `json:"time"`
+	Date string `json:"date"`
+	Time string `json:"time"`
 }
 
 // PostAvailability handles post
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
-	selectedDate := r.Form.Get("reservation-dates")
-	selectedTime := r.Form.Get("selected-time")
+	selectedDate := r.PostForm.Get("date")
+	selectedTime := r.PostForm.Get("timeslot")
 
 	// Dump all the post data
-	for key, values := range r.Form {
+	for key, values := range r.PostForm {
 		for _, value := range values {
 			fmt.Printf("%s = %s\n", key, value)
 		}
@@ -89,11 +87,14 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	rDate, err := time.Parse("2006-01-02", selectedDate)
 	if err != nil {
 		fmt.Println("Error parsing date:", err)
+		w.WriteHeader(400)
 		return
 	}
 	rTime, err := time.Parse("3:04 PM", selectedTime)
 	if err != nil {
 		fmt.Println("Error parsing time:", err)
+		w.WriteHeader(400)
+		w.Write([]byte("{ \"message\": \"test failure\" }"))
 		return
 	}
 	// Combine the parsed date and time into a single time.Time
@@ -114,10 +115,8 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 
 	// Response
 	resp := jsonResponse{
-		OK:      true,
-		Message: "Available!",
-		Date:    selectedDate,
-		Time:    selectedTime,
+		Date: selectedDate,
+		Time: selectedTime,
 	}
 
 	out, err := json.MarshalIndent(resp, "", "     ")
@@ -126,6 +125,7 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
 	w.Write(out)
 
 	fmt.Println("Respon JSON:", string(out))

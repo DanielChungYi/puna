@@ -1,0 +1,15 @@
+@mixin embla($className) {
+  .#{$className} {
+    overflow: hidden;
+
+    &__container {
+      display: flex;
+    }
+
+    &__slide {
+      flex: 0 0 100%;
+      min-width: 0;
+    }
+  }
+}
+@include embla("crsl");

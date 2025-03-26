@@ -1,0 +1,403 @@
+/* modified from vanillajs-datepicker with fixes */
+@use 'sass:color';
+@use 'sass:math';
+@use 'pkg:bulma/sass/utilities' as b;
+
+//== foundational variables ==//
+$black: b.$black;
+$white: b.$white;
+$light: b.$light;
+$dark: b.$dark;
+$link: b.$link;
+
+$grey-dark: b.$grey-dark;
+$grey-light: b.$grey-light;
+$grey-lighter: b.$grey-lighter;
+
+// fix: not available in newer Bulma
+$primary-invert: b.bulmaFindColorInvert(b.$primary);
+$link-invert: b.bulmaFindColorInvert($link);
+
+//== datepicker variables ==//
+$background-color: $white !default;
+$border-color: b.$border !default;
+$border-radius: b.$radius !default;
+$border-radius-small: b.$radius-small !default;
+$line-height-base: 1.5 !default;
+$font-size-normal: b.$size-normal !default;
+$font-size-small: b.$size-small !default;
+$font-weight-semibold: b.$weight-semibold !default;
+$font-weight-bold: b.$weight-bold !default;
+$dropdown-offset: 4px !default;
+$dropdown-shadow: 0 2px 3px rgb($black, 0.1), 0 0 0 1px rgb($black, 0.1) !default;
+$dropdown-z: 20 !default;
+
+$title-background-color: b.$background !default;
+
+$cell-size-base: 2.25rem !default;
+$cell-focus-background-color: color.scale(b.$white-ter, $lightness: -5%) !default;
+$cell-prevnext-color: b.$grey !default;
+$cell-disabled-color: $grey-lighter !default;
+$cell-selected-background-color: $link !default;
+$cell-selected-color: $link-invert !default;
+$cell-selected-font-weight: $font-weight-semibold !default;
+$cell-today-background-color: b.$primary !default;
+$cell-today-color: $primary-invert !default;
+$cell-highlighted-background-color: b.$white-ter !default;
+$range-start-end-background-color: $grey-light !default;
+$range-start-end-color: $cell-selected-color !default;
+$range-background-color: $grey-lighter !default;
+$range-today-background-color: $cell-today-background-color !default;
+$week-color: $grey-light !default;
+
+$footer-background-color: b.$background !default;
+
+$input-in-edit-border-color: color.scale($link, $lightness: -5%) !default;
+$input-in-edit-focus-box-shadow-size: 0 0 0.25em 0.25em !default;
+
+@mixin -header-button-common {
+  border-color: transparent;
+  font-weight: bold;
+}
+
+@mixin -footer-button-common {
+  flex: auto;
+  margin: calc(0.375rem - 1px) 0.375rem;
+  border-radius: $border-radius-small;
+  font-size: $font-size-small;
+}
+
+@mixin dp-button {
+  .button {
+    .datepicker-header & {
+      @include -header-button-common;
+
+      &:hover {
+        background-color: color.scale($white, $lightness: -2.5%);
+      }
+
+      &:focus {
+        &:not(:active) {
+          box-shadow: 0 0 0 0.125em rgb($white, 0.25);
+        }
+      }
+
+      &:active {
+        background-color: color.scale($white, $lightness: -5%);
+      }
+    }
+
+    .datepicker-footer & {
+      @include -footer-button-common;
+    }
+  }
+}
+
+//== calculated variables ==//
+$dow-height: $font-size-normal * $line-height-base !default;
+$dow-font-size: math.div($font-size-small + $font-size-normal, 2) !default;
+$view-width: $cell-size-base * 7 !default;
+$week-numbers-width: math.percentage(math.div(0.75, 0.75 + 1 * 7)) !default; // 0.75 = small-font, 1 = nomal-font
+$month-year-height: $cell-size-base * 2 !default;
+
+$header-hover-background-color: color.scale($white, $lightness: -2.5%) !default;
+$header-active-background-color: color.scale($white, $lightness: -5%) !default;
+$cell-hover-background-color: color.scale($background-color, $lightness: -2.5%) !default;
+$cell-today-focus-background-color: color.scale($cell-today-background-color, $lightness: -2.5%) !default;
+$cell-highlighted-hover-background-color: color.scale($cell-highlighted-background-color, $lightness: -2.5%) !default;
+$cell-prevnext-selected-color: color.scale($cell-selected-color, $lightness: -10%) !default;
+$range-start-end-focus-background-color: color.scale($range-start-end-background-color, $lightness: -2.5%) !default;
+$range-hover-background-color: color.scale($range-background-color, $lightness: -2.5%) !default;
+$range-focus-background-color: color.scale($range-background-color, $lightness: -5%) !default;
+$range-disabled-background-color: color.scale($range-background-color, $lightness: -10%) !default;
+
+$title-box-shadow: inset 0 -1px 1px rgb($black, 0.1) !default;
+$footer-box-shadow: inset 0 1px 1px rgb($black, 0.1) !default;
+$input-in-edit-box-shadow: $input-in-edit-focus-box-shadow-size rgb($input-in-edit-border-color, 0.2) !default;
+
+//== non-configurable variables ==//
+$one-seventh: math.percentage(math.div(1, 7));
+
+//== styles ==//
+.datepicker {
+  width: min-content;
+
+  &:not(.active) {
+    display: none;
+  }
+}
+
+.datepicker-dropdown {
+  position: absolute;
+  z-index: $dropdown-z;
+  padding-top: $dropdown-offset;
+
+  &.datepicker-orient-top {
+    padding-top: 0;
+    padding-bottom: $dropdown-offset;
+  }
+}
+
+.datepicker-picker {
+  display: flex;
+  flex-direction: column;
+  border-radius: $border-radius;
+  background-color: $background-color;
+
+  .datepicker-dropdown & {
+    box-shadow: $dropdown-shadow;
+  }
+}
+
+.datepicker-main {
+  flex: auto;
+  padding: 2px;
+}
+
+.datepicker-footer {
+  box-shadow: $footer-box-shadow;
+  background-color: $footer-background-color;
+}
+
+.datepicker-title {
+  box-shadow: $title-box-shadow;
+  background-color: $title-background-color;
+  padding: 0.375rem 0.75rem;
+  text-align: center;
+  font-weight: $font-weight-bold;
+}
+
+.datepicker-controls {
+  display: flex;
+
+  .datepicker-header & {
+    padding: 2px 2px 0;
+  }
+
+  @include dp-button;
+
+  .view-switch {
+    flex: auto;
+  }
+
+  .prev-button,
+  .next-button {
+    padding-right: 0.375rem;
+    padding-left: 0.375rem;
+    flex: 0 0 $one-seventh;
+
+    &.disabled {
+      visibility: hidden;
+    }
+  }
+}
+
+.datepicker-view,
+.datepicker-grid {
+  display: flex;
+}
+
+.datepicker-view {
+  align-items: stretch;
+  width: $view-width;
+}
+
+.datepicker-grid {
+  flex-wrap: wrap;
+  flex: auto;
+}
+
+.datepicker {
+  .days {
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+  }
+
+  .days-of-week {
+    display: flex;
+  }
+
+  .week-numbers {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 $week-numbers-width;
+  }
+
+  .weeks {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: auto;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius;
+    cursor: default;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .dow {
+    height: $dow-height;
+    font-size: $dow-font-size;
+    font-weight: $font-weight-bold;
+  }
+
+  .days .dow {
+    @extend %flex-basis-day;
+  }
+
+  .week {
+    flex: auto;
+    color: $week-color;
+    font-size: $font-size-small;
+  }
+}
+
+%flex-basis-day {
+  flex-basis: $one-seventh;
+}
+
+.datepicker-cell {
+  @extend %flex-basis-day;
+
+  height: $cell-size-base;
+
+  &:not(.day) {
+    flex-basis: 25%;
+    height: $month-year-height;
+  }
+
+  &:not(.disabled):hover {
+    background-color: $cell-hover-background-color;
+    cursor: pointer;
+  }
+
+  &.focused:not(.selected) {
+    background-color: $cell-focus-background-color;
+  }
+
+  &.selected {
+    &,
+    &:hover {
+      background-color: $cell-selected-background-color;
+      color: $cell-selected-color;
+      font-weight: $cell-selected-font-weight;
+    }
+  }
+
+  &.disabled {
+    color: $cell-disabled-color;
+  }
+
+  &.prev,
+  &.next {
+    &:not(.disabled) {
+      color: $cell-prevnext-color;
+    }
+
+    &.selected {
+      color: $cell-prevnext-selected-color;
+    }
+  }
+
+  &.highlighted:not(.selected):not(.range):not(.today) {
+    border-radius: 0;
+    background-color: $cell-highlighted-background-color;
+
+    &:not(.disabled):hover {
+      background-color: $cell-highlighted-hover-background-color;
+    }
+
+    &.focused {
+      background-color: $cell-focus-background-color;
+    }
+  }
+
+  &.today {
+    &:not(.selected) {
+      background-color: $cell-today-background-color;
+
+      &:not(.disabled) {
+        color: $cell-today-color;
+      }
+    }
+
+    &.focused:not(.selected) {
+      background-color: $cell-today-focus-background-color;
+    }
+  }
+
+  &%range-start-end-common {
+    background-color: $range-start-end-background-color;
+    color: $range-start-end-color;
+  }
+
+  &%range-start-end-focused-common {
+    background-color: $range-start-end-focus-background-color;
+  }
+
+  &.range-start {
+    &:not(.range-end) {
+      border-radius: $border-radius 0 0 $border-radius;
+    }
+
+    &:not(.selected) {
+      @extend %range-start-end-common;
+    }
+
+    &.focused:not(.selected) {
+      @extend %range-start-end-focused-common;
+    }
+  }
+
+  &.range-end {
+    &:not(.range-start) {
+      border-radius: 0 $border-radius $border-radius 0;
+    }
+
+    &:not(.selected) {
+      @extend %range-start-end-common;
+    }
+
+    &.focused:not(.selected) {
+      @extend %range-start-end-focused-common;
+    }
+  }
+
+  &.range {
+    border-radius: 0;
+    background-color: $range-background-color;
+
+    &:not(.disabled):not(.focused):not(.today):hover {
+      background-color: $range-hover-background-color;
+    }
+
+    &.disabled {
+      color: $range-disabled-background-color;
+    }
+
+    &.focused {
+      background-color: $range-focus-background-color;
+    }
+
+    @if $range-today-background-color != $cell-today-background-color {
+      &.today {
+        background-color: $range-today-background-color;
+      }
+    }
+  }
+}
+
+.datepicker-input.in-edit {
+  border-color: $input-in-edit-border-color;
+
+  &:focus,
+  &:active {
+    box-shadow: $input-in-edit-box-shadow;
+  }
+}
