@@ -1,0 +1,24 @@
+@forward "pkg:bulma/sass/base";
+@forward "pkg:bulma/sass/grid/columns";
+@forward "pkg:bulma/sass/helpers";
+@forward "pkg:bulma/sass/layout";
+@forward "pkg:bulma/sass/form";
+@forward "pkg:bulma/sass/elements/block";
+@forward "pkg:bulma/sass/elements/title";
+@forward "pkg:bulma/sass/elements/button";
+@forward "pkg:bulma/sass/elements/icon";
+@forward "pkg:bulma/sass/elements/image";
+@forward "pkg:bulma/sass/components/menu";
+@forward "pkg:bulma/sass/components/dropdown";
+@forward "pkg:bulma/sass/components/navbar";
+@forward "pkg:bulma/sass/components/card";
+
+@forward "pkg:bulma/sass/themes";
+
+// color palette
+:root {
+  --bulma-primary-h: 198deg;
+  --bulma-primary-s: 57%;
+  --bulma-primary-l: 64%;
+  --bulma-link-h: 221deg;
+}

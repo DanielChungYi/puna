@@ -1,184 +1,73 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <h1 class="mt-3">選擇日期</h1>
+<main class="container">
+  <section class="section is-large">
+    <div class="columns is-centered">
+      <div class="column is-half">
 
-                <form action="/search-availability" method="post" novalidate class="needs-validation">
-                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-                    <div class="row">
-                        <div class="col" >
-                            
-                                <input required class="form-control" type="text" placeholder="日期" id="reservation-dates" name="reservation-dates">
-                           
-                        </div>
-                    </div> 
+        <h1 class="title has-text-centered">場地預約</h1>
 
-                    <hr>
+        <div class="card">
+          <div class="card-content">
+            <form id="availability-search">
+              <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
 
-                    <!-- for selected-time -->
-                    <input type="hidden" id="selected-time" name="selected-time">
+              <div class="field">
+                <label class="label" for="reservation-date">日期</label>
+                <div class="control">
+                  <input class="input" type="text" placeholder="選擇日期" name="date" id="reservation-date" required autocomplete="off">
+                </div>
+              </div>
 
-                    <h1 class="mt-3">選擇時段</h1>
-                    <h4 class="mt-3">早上</h4>
-                    <div class="row">
-                        <div class="col-md-3 time-slot">
-                            <button  type="button" class="btn btn-outline-primary btn-block" data-time="8:00 AM">8:00 AM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button  type="button" class="btn btn-outline-primary btn-block" data-time="9:00 AM">9:00 AM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="10:00 AM">10:00 AM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="11:00 AM">11:00 AM</button>
-                        </div>
-                    </div>
-                    
-                    <h4 class="mt-3">下午</h4>
-                    <div class="row">
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="12:00 PM">12:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="1:00 PM">1:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="2:00 PM">2:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="3:00 PM">3:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="4:00 PM">4:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="5:00 PM">5:00 PM</button>
-                        </div>
-                    </div>
+              <div class="field">
+                <label class="label" for="reservation-timeslot">時段</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="timeslot" id="reservation-timeslot" required>
+                      <option value="" disabled selected hidden>選擇時段</label>
+                      <optgroup label="早上">
+                        <option value="8:00 AM">8:00 AM</option>
+                        <option value="9:00 AM">9:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                      </optgroup>
+                      <optgroup label="下午">
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="1:00 PM">1:00 PM</option>
+                        <option value="2:00 PM">2:00 PM</option>
+                        <option value="3:00 PM">3:00 PM</option>
+                        <option value="4:00 PM">4:00 PM</option>
+                        <option value="5:00 PM">5:00 PM</option>
+                      </optgroup>
+                      <optgroup label="晚上">
+                        <option value="6:00 PM">6:00 PM</option>
+                        <option value="7:00 PM">7:00 PM</option>
+                        <option value="8:00 PM">8:00 PM</option>
+                        <option value="9:00 PM">9:00 PM</option>
+                        <option value="10:00 PM">10:00 PM</option>
+                        <option value="11:00 PM">11:00 PM</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-                    <h4 class="mt-3">晚上</h4>
-                    <div class="row">
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="6:00 PM">6:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="7:00 PM">7:00 PM</button>
-                        </div>
-                   
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="8:00 PM">8:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="9:00 PM">9:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="10:00 PM">10:00 PM</button>
-                        </div>
-                        <div class="col-md-3 time-slot">
-                            <button type="button" class="btn btn-outline-primary btn-block" data-time="11:00 PM">11:00 PM</button>
-                        </div>
-                    </div>
-                
-                <hr>
-
-                <button type="submit" id="confrim_btn" class="btn btn-primary">確定</button>
-
-                </form>
-
-            </div>
-            
-            <div class="col-md-3"></div>
+              <div class="field">
+                <div class="control">
+                  <button class="button is-link" type="submit">確定</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+
+      </div>
     </div>
-
+  </section>
+</main>
 {{end}}
-
 
 {{define "js"}}
-<script>
-
-    const elem = document.getElementById('reservation-dates');
-    const datepicker = new Datepicker(elem, {
-        format: "yyyy-mm-dd",
-    });
-
-    // Time slot btn logic 
-    document.addEventListener("DOMContentLoaded", function () {
-        const buttons = document.querySelectorAll(".btn.btn-outline-primary.btn-block");
-        const selectedTimeInput = document.getElementById("selected-time");
-        let selectedTime = "";
-
-        buttons.forEach(button => {
-            button.addEventListener("click", function () {
-
-                buttons.forEach(btn => btn.classList.remove("btn-primary"));
-                
-                this.classList.add("btn-primary");
-                selectedTime = this.getAttribute("data-time");
-                selectedTimeInput.value = selectedTime;
-            });
-        });
-
-        document.querySelector("form").addEventListener("submit", function (event) {
-            if (selectedTimeInput.value === "") {
-                Swal.fire("請選擇一個時段！");
-                event.preventDefault();
-            }
-        });
-    });
-
-    document.getElementById("confrim_btn").addEventListener("click", function (event) {
-        event.preventDefault();  // don't reflash the page
-        const selectedDate = document.getElementById("reservation-dates").value;
-        const selectedTime = document.getElementById("selected-time").value;
-        const msg = `已選擇日期：${selectedDate}，時段：${selectedTime}`;
-
-        attention.custom({
-            title: '確認預約',
-            msg: msg,
-            willOpen: () => {
-                if (!selectedDate) {
-                    Swal.fire("請選擇日期");
-                    return;
-                }
-                if (!selectedTime) {
-                    Swal.fire("請選擇時段");
-                    return;
-                }
-            },
-            didOpen: () => {
-                // Disable the btn here.
-            },
-            callback: async function(result) {
-                let formData = new FormData();
-                formData.append("csrf_token", "{{.CSRFToken}}");
-                formData.append("reservation-dates", selectedDate);
-                formData.append("selected-time", selectedTime);
-                try {
-                    const response = await fetch('/search-availability', {
-                    method: "post",
-                    body: formData,
-                    });
-
-                    const data = await response.json();
-                    console.log(data);
-                    if (data.ok) {
-                        Swal.fire(`✅ 預約成功！\n📅 日期：${data.date}\n🕒 時間：${data.time}\n📢 訊息：${data.message}`);
-                    } else {
-                        Swal.fire(`❌ 預約失敗：${data.message}`);
-                    }
-                } catch (error) {
-                    Swal.fire("⚠️ 發生錯誤，請稍後再試！" + error);
-                    console.log(error);
-                }            
-            }
-        });
-    })
-</script>
+<script src="/assets/js/search-availability.js"></script>
 {{end}}
-

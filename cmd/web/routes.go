@@ -25,8 +25,12 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/court-info", handlers.Repo.CourtInfo)
 	mux.Get("/contact", handlers.Repo.Contact)
 
-	fileServer := http.FileServer(http.Dir("./static/"))
-	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
+	const (
+		assetsDir     = "./static"
+		assetsUrlPath = "/assets"
+	)
+	fileServer := http.FileServer(http.Dir(assetsDir))
+	mux.Handle(assetsUrlPath+"/*", http.StripPrefix(assetsUrlPath, fileServer))
 
 	return mux
 }

@@ -1,63 +1,49 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <div id="main-carousel" class="carousel slide" data-ride="carousel">
-
-        <ol class="carousel-indicators">
-            <li data-target="#main-carousel" data-slide-to="0" class="active"></li>
-            <li data-target="#main-carousel" data-slide-to="1"></li>
-            <li data-target="#main-carousel" data-slide-to="2"></li>
-        </ol>
-
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="/static/images/court1.jpg" class="d-block w-100" style="height: 600px;" alt="Badminton pic">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>球場照片一</h5>
-                    <p>圖片介紹</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="/static/images/court2.jpg" class="d-block w-100" style="height: 600px;" alt="Badminton pic">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>球場照片二</h5>
-                    <p>圖片介紹</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="/static/images/court3.jpg" class="d-block w-100" style="height: 600px;" alt="Badminton pic">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>球場照片三</h5>
-                    <p>圖片介紹</p>
-                </div>
-            </div>
+<main>
+  <header>
+    <div class="crsl">
+      <div class="crsl__container">
+        <div class="crsl__slide">
+          <figure>
+            <img src="/assets/images/court1.jpg" alt="Court pic">
+            <figcaption>圖片介紹</figcaption>
+          </figure>
         </div>
+        <div class="crsl__slide">
+          <figure>
+            <img src="/assets/images/court2.jpg" alt="Court pic">
+            <figcaption>圖片介紹</figcaption>
+          </figure>
+        </div>
+        <div class="crsl__slide">
+          <figure>
+            <img src="/assets/images/court3.jpg" alt="Court pic">
+            <figcaption>圖片介紹</figcaption>
+          </figure>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center mt-4">普那羽球運動會館</h1>
-                <p>
-                    羽球球場出租
-                    羽球訓練、運動服務
-                    瑜珈有氧、韻律教室的服務
-                    健身房教室的服務
-                    個人化教學
-                    運動休閒用品展銷
-                </p>
-            </div>
-        </div>
+  <div class="section">
+	<section class="container">
+      <h1 class="title has-text-centered">普那羽球運動會館</h1>
+      <p class="block">
+        羽球球場出租
+        羽球訓練、運動服務
+        瑜珈有氧、韻律教室的服務
+        健身房教室的服務
+        個人化教學
+        運動休閒用品展銷
+      </p>
+      <div class="block has-text-centered"><a href="/search-availability" class="button is-success">場地預定</a></div>
+	</section>
+  </div>
+</main>
+{{end}}
 
-
-        <div class="row">
-
-            <div class="col text-center">
-
-                <a href="/search-availability" class="btn btn-success">場地預定</a>
-
-            </div>
-        </div>
-
-    </div>
+{{define "js"}}
+<script src="/assets/js/home.js"></script>
 {{end}}
