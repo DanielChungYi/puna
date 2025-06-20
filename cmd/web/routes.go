@@ -15,7 +15,6 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-
 	mux.Get("/", handlers.Repo.Home)
 
 	mux.Get("/search-availability", handlers.Repo.Availability)
@@ -24,6 +23,8 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/court-info", handlers.Repo.CourtInfo)
 	mux.Get("/contact", handlers.Repo.Contact)
+	mux.Get("/login", handlers.Repo.ShowLogin)
+	mux.Post("/login", handlers.Repo.PostShowLogin)
 
 	const (
 		assetsDir     = "./static"

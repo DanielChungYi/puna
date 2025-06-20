@@ -65,6 +65,42 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "search-availability.page.tmpl", &models.TemplateData{})
 }
 
+// Login renders the login page
+func (m *Repository) ShowLogin(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "login.page.tmpl", &models.TemplateData{})
+}
+
+// Login authentication
+func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
+	// Parse form
+	log.Println("🔐 Login handler triggered")
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	log.Printf("Login in with  user ID %d (%s)", email, password)
+
+	// Use the DB method to authenticate
+	id, userEmail, err := m.DB.Authenticate(email, password)
+	if err != nil {
+		log.Println("❌ Authentication failed:", err)
+		http.Error(w, "Invalid login credentials", http.StatusUnauthorized)
+		return
+	}
+
+	// If using sessions (e.g. github.com/alexedwards/scs/v2)
+	// m.App.Session.Put(r.Context(), "user_id", id)
+	// m.App.Session.Put(r.Context(), "user_email", userEmail)
+
+	log.Printf("✅ Login successful for user ID %d (%s)", id, userEmail)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
 type jsonResponse struct {
 	Date string `json:"date"`
 	Time string `json:"time"`
@@ -105,12 +141,15 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 
 	// Insert Reservation
 	reservation := models.Reservation{
-		ID:           rand.Intn(1000),
+		ID:           uint(rand.Uint32()),
 		ResStartTime: sDate,
 		ResEndTime:   eDate,
+		CourtID:      uint(rand.Uint32()),
+		Court:        models.Court{},
 		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
-	m.DB.RunMigrate(reservation)
+
 	m.DB.InsertReservation(reservation)
 
 	// Response

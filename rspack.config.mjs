@@ -87,10 +87,11 @@ export default defineConfig({
     css: true,
   },
   devServer: {
+    port: 8080,
     proxy: [
       {
         context: ['/'],
-        target: "http://localhost:8080",
+        target: "http://localhost:3000",
       }
     ],
     // onListening: consider starting the backend server

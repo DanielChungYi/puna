@@ -13,7 +13,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 )
 
-const portNumber = ":8080"
+const portNumber = ":3000"
 
 var app config.AppConfig
 var session *scs.SessionManager
@@ -41,6 +41,13 @@ func main() {
 	} else {
 		log.Println("Success to connect")
 	}
+
+	// run db schema migration
+	err = db.RunMigrations()
+	if err != nil {
+		log.Fatal("❌ Migration failed:", err)
+	}
+
 	//db.GORM.Close()
 
 	tc, err := render.CreateTemplateCache()

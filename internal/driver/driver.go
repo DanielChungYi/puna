@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/DanielChungYi/puna/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -51,6 +52,15 @@ func NewDataBase(dsn string) (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+func (db *DB) RunMigrations() error {
+	return db.GORM.AutoMigrate(
+		&models.User{},
+		&models.Court{},
+		&models.Reservation{},
+		&models.Restriction{},
+	)
 }
 
 // testDB tries to ping the database
