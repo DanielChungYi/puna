@@ -70,15 +70,28 @@
   label.label {
     color: #888;
   }
+
+  .help.is-danger {
+    color: #ff4d4f;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+  }
 </style>
 
 <div class="login-container">
   <div class="login-card">
-    <h1 class="login-title">會員登入</h1>
+    <h1 class="login-title">建立帳號</h1>
 
-    <form method="POST" action="/login">
-      <!-- CSRF Token -->
+    <form id="registerForm" method="POST" action="/register" onsubmit="return validatePasswords()">
       <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+      <!-- Name -->
+      <div class="field">
+        <label class="label">名稱</label>
+        <div class="control">
+          <input class="input login-input" type="text" name="first_name" placeholder="您的名字" required>
+        </div>
+      </div>
 
       <!-- Email -->
       <div class="field">
@@ -92,24 +105,48 @@
       <div class="field">
         <label class="label">密碼</label>
         <div class="control">
-          <input class="input login-input" type="password" name="password" placeholder="********" required>
+          <input id="password" class="input login-input" type="password" name="password" placeholder="********" required>
         </div>
       </div>
 
-      <!-- Error Message -->
+      <!-- Retype Password -->
+      <div class="field">
+        <label class="label">再次輸入密碼</label>
+        <div class="control">
+          <input id="retypePassword" name="confirm_password" class="input login-input" type="password" placeholder="********" required>
+        </div>
+        <p id="passwordError" class="help is-danger" style="display: none;">兩次輸入的密碼不一致</p>
+      </div>
+
       {{if .Error}}
       <p class="help is-danger">{{.Error}}</p>
       {{end}}
 
       <!-- Submit -->
       <div class="field">
-        <button type="submit" class="button login-button">登入</button>
+        <button type="submit" class="button login-button">註冊</button>
       </div>
     </form>
 
     <div class="login-footer">
-      <a href="/register">還沒有帳號？立即註冊</a>
+      <a href="/login">已經有帳號？前往登入</a>
     </div>
   </div>
 </div>
+
+<script>
+  function validatePasswords() {
+    const pw1 = document.getElementById('password').value;
+    const pw2 = document.getElementById('retypePassword').value;
+    const error = document.getElementById('passwordError');
+
+    if (pw1 !== pw2) {
+      error.style.display = 'block';
+      return false;
+    }
+
+    error.style.display = 'none';
+    return true;
+  }
+</script>
 {{end}}

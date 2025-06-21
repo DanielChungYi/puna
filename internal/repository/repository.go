@@ -6,5 +6,6 @@ type DatabaseRepo interface {
 	RunMigrate() error
 
 	InsertReservation(res models.Reservation) error
+	CreateAccount(Name, email, plainPassword string) (int, error)
 	Authenticate(email, testPassword string) (int, string, error)
 }

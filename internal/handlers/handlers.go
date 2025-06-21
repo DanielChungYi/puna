@@ -73,7 +73,6 @@ func (m *Repository) ShowLogin(w http.ResponseWriter, r *http.Request) {
 // Login authentication
 func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	// Parse form
-	log.Println("🔐 Login handler triggered")
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
@@ -82,9 +81,6 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 
 	email := r.Form.Get("email")
 	password := r.Form.Get("password")
-
-	log.Printf("Login in with  user ID %d (%s)", email, password)
-
 	// Use the DB method to authenticate
 	id, userEmail, err := m.DB.Authenticate(email, password)
 	if err != nil {
@@ -93,11 +89,59 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// If using sessions (e.g. github.com/alexedwards/scs/v2)
-	// m.App.Session.Put(r.Context(), "user_id", id)
-	// m.App.Session.Put(r.Context(), "user_email", userEmail)
+	log.Printf("🔐 Logging in with Id: %d, Email: %s, Password HEX: %x", id, email, []byte(password))
+
+	m.App.Session.Put(r.Context(), "user_id", id)
+	m.App.Session.Put(r.Context(), "user_email", userEmail)
 
 	log.Printf("✅ Login successful for user ID %d (%s)", id, userEmail)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// ShowRegister renders the register page
+func (m *Repository) ShowRegister(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "register.page.tmpl", &models.TemplateData{})
+}
+
+// PostShowRegister handles the registration form submission
+func (m *Repository) PostShowRegister(w http.ResponseWriter, r *http.Request) {
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Unable to parse form", http.StatusBadRequest)
+		return
+	}
+
+	Name := r.Form.Get("name")
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+	confirmPassword := r.Form.Get("confirm_password") // from HTML if you want double check on server too
+
+	// 🪵 Debug logging of user input
+	log.Printf("Register New account: First Name=%s, Email=%s, Password Len=%d, Confirm Password Len=%d", Name, email, len(password), len(confirmPassword))
+
+	// Check if passwords match (optional, client already validated)
+	if password != confirmPassword {
+		log.Println("❌ Passwords do not match")
+		http.Error(w, "Passwords do not match", http.StatusBadRequest)
+		return
+	}
+
+	// Attempt to create the user
+	userID, err := m.DB.CreateAccount(Name, email, password)
+	if err != nil {
+		log.Println("❌ Failed to create user:", err)
+		http.Error(w, "Account creation failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("Register: User created successfully with ID: %d", userID)
+
+	// Optionally log them in directly
+	m.App.Session.Put(r.Context(), "user_id", userID)
+	m.App.Session.Put(r.Context(), "user_email", email)
+
+	// Redirect to home or dashboard
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

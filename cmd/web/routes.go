@@ -25,7 +25,8 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Get("/login", handlers.Repo.ShowLogin)
 	mux.Post("/login", handlers.Repo.PostShowLogin)
-
+	mux.Get("/register", handlers.Repo.ShowRegister)
+	mux.Post("/register", handlers.Repo.PostShowRegister)
 	const (
 		assetsDir     = "./static"
 		assetsUrlPath = "/assets"

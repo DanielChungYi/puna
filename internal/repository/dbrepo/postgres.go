@@ -3,9 +3,11 @@ package dbrepo
 import (
 	"errors"
 	"log"
+	"time"
 
 	"github.com/DanielChungYi/puna/internal/models"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func (m *postgresDBRepo) RunMigrate() error {
@@ -38,6 +40,38 @@ func (m *postgresDBRepo) UpdateReservation(res models.Reservation) error {
 		return result.Error
 	}
 	return nil
+}
+
+func (m *postgresDBRepo) CreateAccount(Name, email, plainPassword string) (int, error) {
+	// Check if user already exists
+	var existing models.User
+	if err := m.DB.Where("email = ?", email).First(&existing).Error; err == nil {
+		return 0, errors.New("email already registered")
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, err
+	}
+
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(plainPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return 0, err
+	}
+
+	// Create the user
+	user := models.User{
+		Name:        Name,
+		Email:       email,
+		Password:    string(hashedPassword),
+		AccessLevel: 1,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	if err := m.DB.Create(&user).Error; err != nil {
+		return 0, err
+	}
+
+	return int(user.ID), nil
 }
 
 func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {

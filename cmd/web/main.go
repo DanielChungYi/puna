@@ -48,8 +48,6 @@ func main() {
 		log.Fatal("❌ Migration failed:", err)
 	}
 
-	//db.GORM.Close()
-
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
