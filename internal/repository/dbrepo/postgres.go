@@ -74,20 +74,20 @@ func (m *postgresDBRepo) CreateAccount(Name, email, plainPassword string) (int, 
 	return int(user.ID), nil
 }
 
-func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+func (m *postgresDBRepo) Authenticate(email, testPassword string) (int, string, string, error) {
 	var user models.User
 
 	result := m.DB.Where("email = ?", email).First(&user)
 	if result.Error != nil {
-		return 0, "", result.Error
+		return 0, "", "", result.Error
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(testPassword))
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return 0, "", errors.New("incorrect password")
+		return 0, "", "", errors.New("incorrect password")
 	} else if err != nil {
-		return 0, "", err
+		return 0, "", "", err
 	}
 
-	return int(user.ID), user.Email, nil
+	return int(user.ID), user.Email, user.Name, nil
 }

@@ -45,7 +45,10 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIP := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
-	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{
+		UserName:        m.App.Session.GetString(r.Context(), "user_name"),
+		IsAuthenticated: m.App.Session.GetBool(r.Context(), "IsAuthenticated"),
+	})
 }
 
 // Reservation renders the make a reservation page and displays form
@@ -66,12 +69,12 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 }
 
 // Login renders the login page
-func (m *Repository) ShowLogin(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "login.page.tmpl", &models.TemplateData{})
 }
 
 // Login authentication
-func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	// Parse form
 	err := r.ParseForm()
 	if err != nil {
@@ -82,7 +85,7 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	email := r.Form.Get("email")
 	password := r.Form.Get("password")
 	// Use the DB method to authenticate
-	id, userEmail, err := m.DB.Authenticate(email, password)
+	id, userEmail, Name, err := m.DB.Authenticate(email, password)
 	if err != nil {
 		log.Println("❌ Authentication failed:", err)
 		http.Error(w, "Invalid login credentials", http.StatusUnauthorized)
@@ -93,19 +96,27 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "user_id", id)
 	m.App.Session.Put(r.Context(), "user_email", userEmail)
+	m.App.Session.Put(r.Context(), "user_name", Name)
+	m.App.Session.Put(r.Context(), "IsAuthenticated", true)
 
-	log.Printf("✅ Login successful for user ID %d (%s)", id, userEmail)
+	log.Printf("✅ Login successful for user ID %d, mail:%s, name:%s", id, userEmail, Name)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Logout renders the login page
+func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
+	m.App.Session.Destroy(r.Context())
+	m.App.Session.Put(r.Context(), "flash", "您已成功登出")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // ShowRegister renders the register page
-func (m *Repository) ShowRegister(w http.ResponseWriter, r *http.Request) {
+func (m *Repository) Register(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "register.page.tmpl", &models.TemplateData{})
 }
 
 // PostShowRegister handles the registration form submission
-func (m *Repository) PostShowRegister(w http.ResponseWriter, r *http.Request) {
-
+func (m *Repository) PostRegister(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Unable to parse form", http.StatusBadRequest)
@@ -136,10 +147,6 @@ func (m *Repository) PostShowRegister(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Register: User created successfully with ID: %d", userID)
-
-	// Optionally log them in directly
-	m.App.Session.Put(r.Context(), "user_id", userID)
-	m.App.Session.Put(r.Context(), "user_email", email)
 
 	// Redirect to home or dashboard
 	http.Redirect(w, r, "/", http.StatusSeeOther)

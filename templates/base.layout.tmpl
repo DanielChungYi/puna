@@ -39,9 +39,27 @@
 
           <div class="navbar-end">
             <div class="navbar-item">
+
+            {{if .IsAuthenticated}}
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                  <span class="icon">
+                    <i class="fas fa-user-circle"></i>
+                  </span>
+                  {{.UserName}}
+                </a>
+
+                <div class="navbar-dropdown is-right">
+                  <a class="navbar-item" href="/logout">登出</a>
+                </div>
+              </div>
+            {{else}}
               <div class="buttons">
                 <a class="button is-primary" href="/login">登入</a>
               </div>
+            {{end}}
+
+
             </div>
           </div>
         </div>

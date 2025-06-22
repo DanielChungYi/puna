@@ -7,5 +7,5 @@ type DatabaseRepo interface {
 
 	InsertReservation(res models.Reservation) error
 	CreateAccount(Name, email, plainPassword string) (int, error)
-	Authenticate(email, testPassword string) (int, string, error)
+	Authenticate(email, testPassword string) (int, string, string, error)
 }
