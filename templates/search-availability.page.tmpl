@@ -16,38 +16,45 @@
               <div class="field">
                 <label class="label" for="reservation-date">日期</label>
                 <div class="control">
-                  <input class="input" type="text" placeholder="選擇日期" name="date" id="reservation-date" required autocomplete="off">
+                  <input
+                      class="input"
+                      type="text"
+                      placeholder="選擇日期"
+                      name="date"
+                      id="reservation-date"
+                      required
+                      autocomplete="off"
+                      readonly
+                      inputmode="none"
+                    />
                 </div>
               </div>
 
+              <!-- start time -->
               <div class="field">
-                <label class="label" for="reservation-timeslot">時段</label>
+                <label class="label" for="start-hour">開始時間</label>
                 <div class="control">
                   <div class="select">
-                    <select name="timeslot" id="reservation-timeslot" required>
-                      <option value="" disabled selected hidden>選擇時段</label>
-                      <optgroup label="早上">
-                        <option value="8:00 AM">8:00 AM</option>
-                        <option value="9:00 AM">9:00 AM</option>
-                        <option value="10:00 AM">10:00 AM</option>
-                        <option value="11:00 AM">11:00 AM</option>
-                      </optgroup>
-                      <optgroup label="下午">
-                        <option value="12:00 PM">12:00 PM</option>
-                        <option value="1:00 PM">1:00 PM</option>
-                        <option value="2:00 PM">2:00 PM</option>
-                        <option value="3:00 PM">3:00 PM</option>
-                        <option value="4:00 PM">4:00 PM</option>
-                        <option value="5:00 PM">5:00 PM</option>
-                      </optgroup>
-                      <optgroup label="晚上">
-                        <option value="6:00 PM">6:00 PM</option>
-                        <option value="7:00 PM">7:00 PM</option>
-                        <option value="8:00 PM">8:00 PM</option>
-                        <option value="9:00 PM">9:00 PM</option>
-                        <option value="10:00 PM">10:00 PM</option>
-                        <option value="11:00 PM">11:00 PM</option>
-                      </optgroup>
+                    <select name="start_hour" id="start-hour" required>
+                      <option value="" disabled selected hidden>選擇開始時間</option>
+                      {{range $h := .Hours}}
+                      <option value="{{$h.Value}}">{{$h.Label}}</option>
+                      {{end}}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- end time -->
+              <div class="field">
+                <label class="label" for="end-hour">結束時間</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="end_hour" id="end-hour" required disabled>
+                      <option value="" disabled selected hidden>選擇結束時間</option>
+                      {{range $h := .Hours}}
+                      <option value="{{$h.Value}}">{{$h.Label}}</option>
+                      {{end}}
                     </select>
                   </div>
                 </div>

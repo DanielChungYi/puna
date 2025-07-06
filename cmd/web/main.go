@@ -23,6 +23,9 @@ func main() {
 	// change this to true when in production
 	app.InProduction = false
 
+	// initialize configuration
+	app.BookingRules = config.NewDefaultBookingConfig()
+
 	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour

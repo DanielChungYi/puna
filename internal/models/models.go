@@ -29,11 +29,18 @@ type Restriction struct {
 }
 
 type Reservation struct {
-	ID           uint      `gorm:"primaryKey"`
-	ResStartTime time.Time `gorm:"not null"`
-	ResEndTime   time.Time `gorm:"not null"`
-	CourtID      uint      `gorm:"not null"` // foreign key
-	Court        Court     `gorm:"foreignKey:CourtID"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID          uint      `gorm:"primaryKey"`
+	UserID      uint      `gorm:"not null"`
+	User        User      `gorm:"foreignKey:UserID"`
+	CourtID     uint      `gorm:"not null;uniqueIndex:idx_court_date_hour"`
+	Court       Court     `gorm:"foreignKey:CourtID"`
+	BookingDate time.Time `gorm:"not null;uniqueIndex:idx_court_date_hour"`
+	StartHour   int       `gorm:"not null;uniqueIndex:idx_court_date_hour"`
+	EndHour     int       `gorm:"not null"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}
+
+func (Reservation) TableName() string {
+	return "reservations"
 }

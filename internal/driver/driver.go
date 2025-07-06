@@ -2,6 +2,8 @@ package driver
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/DanielChungYi/puna/internal/models"
@@ -55,12 +57,66 @@ func NewDataBase(dsn string) (*gorm.DB, error) {
 }
 
 func (db *DB) RunMigrations() error {
-	return db.GORM.AutoMigrate(
+	err := db.GORM.AutoMigrate(
 		&models.User{},
 		&models.Court{},
 		&models.Reservation{},
 		&models.Restriction{},
 	)
+
+	if err != nil {
+		return err
+	}
+
+	// Add composite index manually
+	createIndex := `
+		CREATE INDEX IF NOT EXISTS idx_reservation_court_date_hours
+		ON reservations (court_id, booking_date, start_hour, end_hour);
+	`
+	if err := db.GORM.Exec(createIndex).Error; err != nil {
+		log.Println("⚠️ Failed to create composite index:", err)
+		return err
+	}
+
+	// Seed 12 courts
+	if err := SeedCourts(db.GORM); err != nil {
+		log.Fatal("seeding courts failed:", err)
+	}
+
+	return nil
+}
+
+func SeedCourts(db *gorm.DB) error {
+	// Check if courts already exist
+	var count int64
+	if err := db.Model(&models.Court{}).Count(&count).Error; err != nil {
+		return err
+	}
+
+	if count > 0 {
+		log.Println("✅ Courts already seeded")
+		return nil
+	}
+
+	// Create 12 courts
+	var courts []models.Court
+	for i := 1; i <= 12; i++ {
+		courts = append(courts, models.Court{
+			CourtName: "Court " + itoa(i),
+		})
+	}
+
+	if err := db.Create(&courts).Error; err != nil {
+		return err
+	}
+
+	log.Println("✅ Successfully seeded 12 courts")
+	return nil
+}
+
+// Helper function to convert int to string
+func itoa(i int) string {
+	return fmt.Sprintf("%d", i)
 }
 
 // testDB tries to ping the database

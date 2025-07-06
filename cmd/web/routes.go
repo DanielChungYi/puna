@@ -17,9 +17,9 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Use(SessionLoad)
 	mux.Get("/", handlers.Repo.Home)
 
-	mux.Get("/search-availability", handlers.Repo.Availability)
-	mux.Post("/search-availability", handlers.Repo.PostAvailability)
-	mux.Get("/make-reservation", handlers.Repo.Reservation)
+	mux.Get("/search-availability", handlers.Repo.Availability)     // 顯示畫面
+	mux.Get("/check-availability", handlers.Repo.CheckAvailability) // 查可用數量
+	mux.Post("/make-reservation", handlers.Repo.MakeReservation)    // 確定預約
 
 	mux.Get("/court-info", handlers.Repo.CourtInfo)
 	mux.Get("/contact", handlers.Repo.Contact)

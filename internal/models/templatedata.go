@@ -4,6 +4,12 @@ import (
 	forms "github.com/DanielChungYi/puna/internal/form"
 )
 
+// Hour option
+type HourOption struct {
+	Value int
+	Label string
+}
+
 // TemplateData holds data sent from handlers to templates
 type TemplateData struct {
 	StringMap       map[string]string
@@ -17,4 +23,5 @@ type TemplateData struct {
 	Form            *forms.Form
 	IsAuthenticated bool
 	UserName        string
+	Hours           []HourOption
 }
