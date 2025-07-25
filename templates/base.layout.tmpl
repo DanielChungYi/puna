@@ -10,56 +10,61 @@
         <title>My Nice Page</title>
 
         <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     </head>
 
     <body>
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="/"><strong>普納羽球運動會館</strong></a>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu-main">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            </a>
-        </div>
-
-        <div class="navbar-menu" id="nav-menu-main">
-          <div class="navbar-start">
-            <a class="navbar-item" href="/">首頁</a>
-            <a class="navbar-item" href="/search-availability">場地預訂</a>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">場地介紹</a>
-              <div class="navbar-dropdown">
-                <a class="navbar-item" href="/court-info">場地介紹</a>
-              </div>
-            </div>
-            <a class="navbar-item" href="/contact">聯絡我們</a>
+      <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+        <div class="container">
+          <div class="navbar-brand">
+              <a class="navbar-item" href="/"><strong>普納羽球運動會館</strong></a>
+              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu-main">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              </a>
           </div>
 
-          <div class="navbar-end">
-            <div class="navbar-item">
-
-            {{if .IsAuthenticated}}
+          <div class="navbar-menu" id="nav-menu-main">
+            <div class="navbar-start">
+              <a class="navbar-item" href="/">首頁</a>
+              <a class="navbar-item" href="/search-availability">場地預訂</a>
               <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                  <span class="icon">
-                    <i class="fas fa-user-circle"></i>
-                  </span>
-                  {{.UserName}}
-                </a>
-
-                <div class="navbar-dropdown is-right">
-                  <a class="navbar-item" href="/logout">登出</a>
+                <a class="navbar-link">場地介紹</a>
+                <div class="navbar-dropdown">
+                  <a class="navbar-item" href="/court-info">場地介紹</a>
                 </div>
               </div>
-            {{else}}
-              <div class="buttons">
-                <a class="button is-primary" href="/login">登入</a>
+              <a class="navbar-item" href="/contact">聯絡我們</a>
+            </div>
+
+            <div class="navbar-end">
+              <div class="navbar-item">
+
+              {{if .IsAuthenticated}}
+                <div class="navbar-item has-dropdown is-hoverable">
+                  <a class="navbar-link">
+                    <span class="icon">
+                      <i class="fas fa-user-circle"></i>
+                    </span>
+                    {{.UserName}}
+                  </a>
+
+                  <div class="navbar-dropdown is-right">
+                    <a class="navbar-item" href="/logout">登出</a>
+                  </div>
+                </div>
+              {{else}}
+                <div class="buttons">
+                  <a class="button is-primary" href="/login">登入</a>
+                </div>
+              {{end}}
+
+
               </div>
-            {{end}}
-
-
             </div>
           </div>
         </div>
