@@ -379,3 +379,10 @@ type jsonResponse struct {
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
 }
+
+func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{
+		UserName:        m.App.Session.GetString(r.Context(), "user_name"),
+		IsAuthenticated: m.App.Session.GetBool(r.Context(), "IsAuthenticated"),
+	})
+}

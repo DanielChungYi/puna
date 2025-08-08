@@ -19,6 +19,14 @@ export default defineConfig({
     main: [
       `${BASE_DIR}/src/index.js`,
     ],
+    "vendor/admin/main": [
+      `${BASE_DIR}/vendor/admin/js/main.js`,
+      `${BASE_DIR}/vendor/admin/css/main.scss`
+    ],
+    "vendor/admin/dashboard": [
+      `${BASE_DIR}/vendor/admin/js/main.min.js`,
+      `${BASE_DIR}/vendor/admin/css/main.min.css`
+    ],
     ...extraJsBundles
   },
   module: {
@@ -35,7 +43,7 @@ export default defineConfig({
                     content: ['./templates/**/*.tmpl', `${BASE_DIR}/**/*.js`],
                     variables: true,
                     safelist: {
-                      greedy: [/datepicker/],
+                      greedy: [/datepicker/, /bulma/, /admin/, /navbar/, /sidebar/, /mdi/],
                     },
                   }),
                 ],
@@ -68,7 +76,12 @@ export default defineConfig({
   },
   plugins: [
     new rspack.CopyRspackPlugin({
-      patterns: [{ from: `${BASE_DIR}/images`, to: 'images' }],
+      patterns: [
+        { from: `${BASE_DIR}/images`, to: 'images' },
+        { from: `${BASE_DIR}/vendor/admin/img`, to: 'vendor/admin/img' },
+        { from: `${BASE_DIR}/vendor/admin/css/main.min.css`, to: 'vendor/admin/css/main.min.css' },
+        { from: `${BASE_DIR}/vendor/admin/js/main.min.js`, to: 'vendor/admin/js/main.min.js' },
+      ],
     }),
   ],
   output: {
