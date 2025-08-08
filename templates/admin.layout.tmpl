@@ -1,0 +1,29 @@
+{{define "admin"}}
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-t">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <title>Admin Dashboard</title>
+
+        <link rel="stylesheet" type="text/css" href="/assets/css/vendor/admin/main.css">
+    </head>
+
+    <body>
+      <p>Admin Layout</p>
+
+    {{block "content" .}}
+
+    {{end}}
+
+    <script src="/assets/js/vendor/admin/main.js"></script>
+    {{block "js" .}}
+
+    {{end}}
+    </body>
+
+    </html>
+{{end}}

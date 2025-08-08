@@ -22,3 +22,13 @@ func NoSurf(next http.Handler) http.Handler {
 func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
+
+func Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !app.Session.GetBool(r.Context(), "IsAuthenticated") {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
