@@ -381,5 +381,8 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "admin.layout.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{
+		UserName:        m.App.Session.GetString(r.Context(), "user_name"),
+		IsAuthenticated: m.App.Session.GetBool(r.Context(), "IsAuthenticated"),
+	})
 }

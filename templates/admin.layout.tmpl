@@ -1,25 +1,29 @@
 {{define "admin"}}
     <!doctype html>
-    <html lang="en">
+    <html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
 
     <head>
         <!-- Required meta tags -->
-        <meta charset="utf-t">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Admin Dashboard</title>
+        <title>Admin Dashboard - Puna</title>
 
-        <link rel="stylesheet" type="text/css" href="/assets/css/vendor/admin/main.css">
+        <!-- Bulma is included -->
+        <link rel="stylesheet" href="/assets/vendor/admin/css/main.min.css">
+
+        <!-- Fonts -->
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     </head>
 
     <body>
-      <p>Admin Layout</p>
-
     {{block "content" .}}
 
     {{end}}
 
-    <script src="/assets/js/vendor/admin/main.js"></script>
+    <script src="/assets/vendor/admin/js/main.min.js"></script>
     {{block "js" .}}
 
     {{end}}
