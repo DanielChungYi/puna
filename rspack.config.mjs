@@ -20,8 +20,8 @@ export default defineConfig({
       `${BASE_DIR}/src/index.js`,
     ],
     "vendor/admin/main": [
-      "./vendor/admin/js/main.js",
-      "./vendor/admin/css/main.scss"
+      `${BASE_DIR}/vendor/admin/js/main.js`,
+      `${BASE_DIR}/vendor/admin/css/main.scss`
     ],
     ...extraJsBundles
   },
